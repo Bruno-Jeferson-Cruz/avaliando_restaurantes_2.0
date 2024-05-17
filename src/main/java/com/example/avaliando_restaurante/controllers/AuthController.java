@@ -1,5 +1,14 @@
 package com.example.avaliando_restaurante.controllers;
 
+import java.util.Optional;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.example.avaliando_restaurante.domain.User;
 import com.example.avaliando_restaurante.dto.LoginRequestDTO;
 import com.example.avaliando_restaurante.dto.RegisterRequestDTO;
@@ -8,15 +17,6 @@ import com.example.avaliando_restaurante.repositories.UserRepository;
 import com.example.avaliando_restaurante.security.TokenService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")

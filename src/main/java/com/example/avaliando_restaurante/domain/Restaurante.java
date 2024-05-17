@@ -1,5 +1,6 @@
 package com.example.avaliando_restaurante.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,18 +16,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
+@Table(name = "restaurantes")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-    private String name;
-    private String email;
-    private String password;
-    @OneToMany(mappedBy = "cliente")
-    private List<Avaliacao> avaliacoes=new ArrayList<>();
+public class Restaurante implements Serializable {
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
+	private String name;
+	@OneToMany(mappedBy = "restaurante")
+	private List<Avaliacao> avaliacoes=new ArrayList<>();
+
 }

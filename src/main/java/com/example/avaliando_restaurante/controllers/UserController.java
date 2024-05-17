@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.avaliando_restaurante.domain.User;
+import com.example.avaliando_restaurante.dto.RegisterRequestDTO;
 import com.example.avaliando_restaurante.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -42,14 +43,14 @@ public class UserController {
     }
     
     @PutMapping(value="/{id}")
-	public ResponseEntity<String> update(@RequestBody User body ,@PathVariable String id){
+	public ResponseEntity<String> update(@RequestBody RegisterRequestDTO body ,@PathVariable String id){
     	Optional<User> oldUser=repository.findById(id);
     	if(oldUser.isEmpty()) {
     		return ResponseEntity.badRequest().body("User dont found!");
     	}else {
-    		oldUser.get().setName(body.getName());
-    		oldUser.get().setEmail(body.getEmail());
-    		oldUser.get().setPassword(passwordEncoder.encode(body.getPassword()));
+    		oldUser.get().setName(body.name());
+    		oldUser.get().setEmail(body.email());
+    		oldUser.get().setPassword(passwordEncoder.encode(body.password()));
     		User newUser=oldUser.get();
     		repository.deleteById(id);
     		repository.save(newUser);
