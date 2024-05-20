@@ -2,6 +2,7 @@ package com.example.avaliando_restaurante.controllers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.avaliando_restaurante.domain.Restaurante;
+import com.example.avaliando_restaurante.dto.ResponseRestauranteDTO;
 import com.example.avaliando_restaurante.repositories.RestauranteRepository;
 
 @RestController
@@ -23,18 +25,20 @@ public class RestauranteController {
 	private RestauranteRepository repository;
 
 	@GetMapping
-	public ResponseEntity<List<Restaurante>> findAll() {
+	public ResponseEntity<List<ResponseRestauranteDTO>> findAll() {
 		List<Restaurante> list = repository.findAll();
-		return ResponseEntity.ok().body(list);
+		List<ResponseRestauranteDTO> listDto= list.stream().map(x -> new ResponseRestauranteDTO(x)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
 	}
 
 	@GetMapping(value="/{id}")
-	public ResponseEntity<Optional<Restaurante>> findById(@PathVariable String id) {
+	public ResponseEntity<ResponseRestauranteDTO> findById(@PathVariable String id) {
 		Optional<Restaurante> restaurante = repository.findById(id);
 		if(restaurante.isEmpty()) {
 			return ResponseEntity.badRequest().build();
 		}
-		return ResponseEntity.ok().body(restaurante);
+		ResponseRestauranteDTO restauranteDto=new ResponseRestauranteDTO(restaurante.get().getName(),restaurante.get().avsDTO());
+		return ResponseEntity.ok().body(restauranteDto);
 	}
 
 	@PostMapping

@@ -2,6 +2,7 @@ package com.example.avaliando_restaurante.controllers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.avaliando_restaurante.domain.User;
 import com.example.avaliando_restaurante.dto.RegisterRequestDTO;
+import com.example.avaliando_restaurante.dto.UserVisibleDTO;
 import com.example.avaliando_restaurante.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -26,14 +28,19 @@ public class UserController {
 	private final PasswordEncoder passwordEncoder;
 	private final UserRepository repository;
     @GetMapping
-    public ResponseEntity<List<User>> findall(){
+    public ResponseEntity<List<UserVisibleDTO>> findall(){
     	List<User> list=repository.findAll();
-        return ResponseEntity.ok().body(list);
+    	List<UserVisibleDTO> listDto= list.stream().map(x -> new UserVisibleDTO(x)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
     }
     @GetMapping(value="/{id}")
-    public ResponseEntity<Optional<User>> findById(@PathVariable String id){
+    public ResponseEntity<UserVisibleDTO> findById(@PathVariable String id){
     	Optional<User> user=repository.findById(id);
-    	return ResponseEntity.ok().body(user);
+    	if(user.isEmpty()) {
+    		return ResponseEntity.badRequest().build();
+    	}
+    	UserVisibleDTO userDto=new UserVisibleDTO(user.get().getName());
+    	return ResponseEntity.ok().body(userDto);
     }
     
     @DeleteMapping(value="/{id}")
